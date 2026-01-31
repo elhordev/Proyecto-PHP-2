@@ -58,7 +58,7 @@
             <h3 class="text-3xl font-bold mb-12 text-center text-gray-900">
                 Productos Destacados
             </h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
                 @forelse($featuredProducts as $product)
                     <x-product-card :product="$product" />
                 @empty

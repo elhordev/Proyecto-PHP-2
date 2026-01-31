@@ -32,5 +32,11 @@ trait LoadsMockData
     {
         return require database_path('data/mock-products.php');
     }    
-    
+    /**
+     * Load cupons from mock file
+     */
+    protected function getCupons(): array
+    {
+        return require database_path('data/mock-cupon.php');
+    }
 }

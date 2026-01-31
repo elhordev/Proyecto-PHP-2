@@ -26,7 +26,10 @@
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
-                    @php $total = 0; @endphp
+                    @php $total = 0;
+                         
+                    
+                    @endphp
                     
                     @foreach($cartProducts as $product)
                         @php
@@ -94,9 +97,37 @@
                     @endforeach
                 </tbody>
                 <tfoot class="bg-gray-50">
+                    @php
+                        $descuento = 0;
+                        $cupon = session('cupon');
+
+                        if ($cupon) {
+
+                            $porcentaje = $cupon['descuento'] ?? 0;
+                            $descuento = $total * ($porcentaje / 100);
+
+                            
+                        }
+                    @endphp
+
+                    @if ($descuento)
+                        <tr class="bg-green-50">
+                            <td colspan="4" class="px-6 py-4 text-right font-semibold text-green-700">
+                                Descuento ({{ $cupon['codigo'] ?? 'cupón' }}):
+                            </td>
+                            <td class="px-6 py-4 font-bold text-green-700">
+                                -€{{ number_format($descuento, 2) }}
+                            </td>
+                        </tr>
+                    @endif
+
                     <tr>
-                        <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-700">Total:</td>
-                        <td class="px-6 py-4 font-bold text-xl text-primary-600">€{{ number_format($total, 2) }}</td>
+                        <td colspan="4" class="px-6 py-4 text-right font-semibold text-gray-700">
+                            Total:
+                        </td>
+                        <td class="px-6 py-4 font-bold text-xl text-primary-600">
+                            €{{ number_format($total - $descuento, 2) }}
+                        </td>
                     </tr>
                 </tfoot>
             </table>
@@ -113,6 +144,12 @@
                     Realizar Pedido →
                 </button>
             </form>
+            <form action="{{ route('cart.applyCupon') }}" method="POST" class="flex items-center space-x-2">
+                @csrf
+                <input type="text" name="code" placeholder="Código de cupón" class="border-gray-300 rounded-md shadow-sm px-4 py-2">
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                    Aplicar Cupón
+                </button>
         </div>
     @endif
 </div>

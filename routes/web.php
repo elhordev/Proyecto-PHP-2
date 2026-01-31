@@ -44,6 +44,7 @@ Route::post('/cart', [CartController::class, 'store'])->name('cart.store');
 Route::put('/cart/{id}', [CartController::class, 'update'])->name('cart.update');
 Route::delete('/cart/{id}', [CartController::class, 'destroy'])->name('cart.destroy');
 Route::post('/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::post('/applyCupon', [CartController::class, 'applyCupon'])->name('cart.applyCupon');
 
 // ===========================================
 // RUTAS DE USUARIO AUTENTICADO (Breeze)
