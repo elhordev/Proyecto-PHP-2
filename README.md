@@ -1,151 +1,164 @@
-# Arráncalo - Tienda Online de Recambios Usados para Automóviles
+# Documentación Proyecto PHP 2ª Evaluación
 
-[![Laravel](https://img.shields.io/badge/Laravel-10.x-red.svg)](https://laravel.com)
-[![PHP](https://img.shields.io/badge/PHP-8.1+-blue.svg)](https://php.net)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind%20CSS-3.x-38B2AC.svg)](https://tailwindcss.com)
+**Nombre del proyecto:** Arráncalo
 
-**Arráncalo** es una plataforma de comercio electrónico desarrollada en Laravel para la venta de recambios usados de automóviles. Permite a los usuarios explorar categorías de piezas (motores, faros, puertas, carrocería, etc.), ver productos con imágenes y descripciones detalladas, aplicar ofertas, añadir al carrito y simular compras. Incluye un panel de administración básico y mejoras modernas como cupones de descuento gestionados en base de datos y contacto directo vía WhatsApp Web.
+**Descripción**  
+Arráncalo es una aplicación e-commerce desarrollada en Laravel que simula una tienda online de recambios usados para automóviles (desguace virtual). Permite a cualquier visitante navegar por categorías y productos, ver ofertas especiales, añadir artículos al carrito y simular una compra. Los usuarios autenticados pueden acceder a un panel básico y marcar productos como favoritos (aunque en esta versión la wishlist está simplificada).  
 
-El proyecto se basa en un e-commerce sencillo orientado a desguaces virtuales, con énfasis en usabilidad y experiencia móvil.
+El proyecto destaca por su diseño limpio y responsivo, uso de Laravel Sail para desarrollo en contenedores y la incorporación de dos mejoras significativas respecto a la estructura base.
 
-## Características Principales
+El diseño está inspirado el las primeras versiones de Material Design de Google en las anteriores versiones de Android AOKP.
+**Tecnologías utilizadas**  
+- PHP 8.1+  
+- Laravel 10.x  
+- MySQL  
+- Laravel Sail (Docker)  
+- Tailwind CSS + Vite + Alpine.js  
+- Laravel Breeze (autenticación)  
+- Dependencias de desarrollo: Telescope, Pint, PHPStan, PHP_CodeSniffer  
 
-- Navegación por categorías y productos destacados en la home
-- Página de ofertas especiales
-- Carrito de compras persistente en sesión
-- Sistema de cupones de descuento (validación en BD y aplicación en carrito)
-- Contacto directo mediante WhatsApp Web
-- Panel de administración protegido (CRUD de productos, categorías, ofertas y cupones)
-- Autenticación con roles (usuario normal y administrador)
-- Diseño responsivo con Tailwind CSS
+Librerías y facades destacadas:  
+- `Illuminate\Support\Facades\Auth`  
+- `Illuminate\Database\Eloquent\Model`  
+- `Illuminate\Support\Facades\Session` (para carrito y cupones)
 
-## Tecnologías Utilizadas
+**Mejoras implementadas**  
 
-- **Backend**: Laravel 10.x (PHP 8.1+)
-- **Frontend**: Blade + Tailwind CSS 3.x + Vite
-- **Base de datos**: MySQL (con migraciones y seeders)
-- **Entorno Docker**: Laravel Sail
-- **Autenticación**: Laravel Breeze
-- **Gestión de imágenes**: Storage público de Laravel
-- **Integración externa**: Enlaces a WhatsApp Web (wa.me)
-- **Otras herramientas**: Composer, NPM, Docker
+1. **Sistema de cupones de descuento gestionado en base de datos**  
+   - Se creó modelo, migración, seeder y lógica completa para cupones.  
+   - Los cupones se almacenan en la tabla `cupons` con campos: `codigo` (único), `descuento` (porcentaje/fijo), y sus timestamps.  
+   - En el carrito se valida el código contra la BD, se guarda en sesión y se calcula el descuento dinámicamente.  
+   - Se muestra el subtotal, descuento aplicado y total final en la vista del carrito.  
+   - Mock/seeder con varios cupones de prueba (SANFE10 10%, VERANO25 25%, etc.).
+   -Faltaría, para hacerlo redondo, poder desde el panel de administración, editar esos descuentos. (Perdón, falta de tiempo).
 
-## Instalación y Despliegue
+2. **Integración con WhatsApp Web para contacto rápido**  
+   - En header se añadió un botón que abre directamente WhatsApp Web con un mensaje predefinido.  
+   - Uso de enlace `https://wa.me/...` (no requiere API oficial, solo cliente).  
+   - Mejora la conversión de consultas y facilita el contacto móvil sin formularios complejos.
 
-### Requisitos previos
+**Estructura principal del proyecto** (carpetas y archivos más relevantes)
 
-- PHP ≥ 8.1
-- Composer
-- Node.js + NPM
-- Docker + Docker Compose (para Sail)
-- Git
-
-### Pasos de instalación local (con Laravel Sail)
-
-1. Clonar el repositorio
-
-```bash
-git clone https://github.com/elhordev/Proyecto-PHP-2.git arrancalo
-cd arrancalo
+```
+root
+├── app
+│   ├── Http
+│   │   ├── Controllers (CartController, ProductController, WelcomeController...)
+│   │   ├── Middleware
+│   │   └── Requests
+│   ├── Models (Product, Category, Offer, Cupon...)
+│   └── Providers
+├── bootstrap
+├── config
+├── database
+│   ├── factories
+│   ├── migrations (create_cupons_table, etc.)
+│   └── seeders (CuponSeeder, ProductSeeder...)
+├── public
+├── resources
+│   ├── css
+│   ├── js
+│   └── views (welcome.blade.php, cart/index.blade.php, products/show.blade.php...)
+├── routes
+│   └── web.php
+├── storage
+├── tests
+├── vendor
+└── archivos raíz importantes:
+    ├── .env
+    ├── artisan
+    ├── composer.json
+    ├── package.json
+    ├── tailwind.config.js
+    ├── vite.config.js
 ```
 
-2. Copiar archivo de entorno
+**Instrucciones de instalación**
 
-```bash
-cp .env.example .env
-```
+1. Clonar el repositorio  
+   ```bash
+   git clone https://github.com/elhordev/Proyecto-PHP-2.git arrancalo
+   cd arrancalo
+   ```
 
-3. Instalar dependencias
-
-```bash
-composer install
-npm install
-```
-
-4. Iniciar Sail
-
-```bash
-./vendor/bin/sail up -d
-```
-
-5. Generar clave de aplicación
-
-```bash
-sail artisan key:generate
-```
-
-6. Ejecutar migraciones y seeders
-
-```bash
-sail artisan migrate --seed
-```
-
-7. Compilar assets
-
-```bash
-npm run dev
-# o para producción:
-npm run build
-```
-
-8. Acceder a la aplicación
-
-- Frontend: http://localhost
-- Admin: http://localhost/admin (después de login)
-
-### Despliegue en producción (VPS, Forge, etc.)
-
-1. Subir el proyecto vía Git o FTP
-2. Configurar `.env` con credenciales reales
-3. Ejecutar:
-
-```bash
-composer install --optimize-autoloader --no-dev
-php artisan key:generate
-php artisan migrate --force
-php artisan db:seed --force
-php artisan storage:link
-npm ci && npm run build
-```
-
-4. Configurar servidor web (Nginx/Apache) apuntando a `/public`
-
-## Usuarios de Prueba
-
-Los seeders crean los siguientes usuarios de prueba:
-
-| Rol          | Email                  | Contraseña | Notas                              |
-|--------------|------------------------|------------|------------------------------------|
-| Administrador| diego.elhor@gmail.com    | password123  | Acceso completo al panel /admin   |
-        |
-
-**Recomendación**: Cambia las contraseñas en producción inmediatamente.
-
-## Mejoras Implementadas
-
-### 1. Sistema de Cupones de Descuento
-
-Se añadió un sistema completo de cupones gestionado en base de datos:
-
-- **Modelo**: `Cupon` (con campos: `codigo`, `tipo`, `valor`, `activo`, timestamps)
-- **Migración**: `create_cupons_table`
-- **Seeder/Mock**: Datos de prueba (SANFE10 10%, VERANO25 25%, etc.)
-- **Controlador**: Métodos `applyCupon` y lógica en `CartController`
-- **Vista**: Formulario en carrito + visualización de descuento y total ajustado
-- **Lógica**: Validación del código contra BD → guardado en sesión → cálculo dinámico del descuento
-
-### 2. Integración con WhatsApp Web
-
-- Botón/enlace en la página de contacto que abre WhatsApp Web con mensaje predefinido.
-- Implementación simple y efectiva vía `https://wa.me/+numero?text=Consulta%20desde%20Arr%C3%A1ncalo`.
-- Ideal para móviles y mejora la conversión de consultas.
+2. Instalar Sail y preparar entorno  
+   ```bash
+   php artisan sail:install --with=mysql,redis
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
 
 
-## Licencia
+3. Configurar `.env` (base de datos)  
+   ```env
+   DB_CONNECTION=mysql
+   DB_HOST=myshop
+   DB_PORT=3306
+   DB_DATABASE=myshop
+   DB_USERNAME=sail
+   DB_PASSWORD=password
+   ```
 
-MIT License
+4. Levantar contenedores  
+   ```bash
+   sail up -d --build
+   ```
 
-¡Gracias por visitar Arráncalo! 🚗💨
+5. Crear y dar permisos a la base de datos (si es necesario)  
+   ```bash
+   sail mysql -u root -ppassword
+   ```
+   Dentro de MySQL:
+   ```sql
+   CREATE DATABASE IF NOT EXISTS arrancalo;
+   GRANT ALL PRIVILEGES ON arrancalo.* TO 'sail'@'%';
+   FLUSH PRIVILEGES;
+   exit
+   ```
 
-Creado con ❤️ por elhordev (enero 2026)
+6. Migrar y poblar la base de datos  
+   ```bash
+   sail artisan migrate --seed
+   ```
+
+7. Instalar dependencias frontend  
+   ```bash
+   sail npm install
+   sail npm run dev   # o npm run build para producción
+   ```
+
+8. Acceder a la aplicación  
+   - Frontend: http://localhost  
+   - Admin: http://localhost/admin (tras login)
+
+**Uso básico**
+
+- **Inicio**: categorías y productos destacados + acceso rápido a ofertas  
+- **Productos**: listado general y página detalle con productos del mismo color  
+- **Ofertas**: página dedicada con descuentos y productos afectados  
+- **Carrito**: añadir, modificar cantidades, aplicar cupón, ver total con descuento  
+- **Contacto**: botón directo a WhatsApp Web  
+- **Autenticación**: login/register vía Breeze  
+- **Administración**: /admin/products (gestionar productos, categorías, ofertas y cupones)
+
+**Usuarios de prueba** (creados por seeder)
+
+| Rol          | Email                   | Contraseña | Acceso principal                  |
+|--------------|-------------------------|------------|-----------------------------------|
+| Administrador| admin@arrancalo.com     | password   | Panel completo (/admin)           |
+
+**Requisitos previos**
+
+- Docker + Docker Compose  
+- Composer  
+- PHP 8.1+  
+- Node.js + npm  
+- Puertos 80, 3306 y 6379 libres
+
+**Autor**  
+elhordev  
+GitHub: https://github.com/elhordev/Proyecto-PHP-2
+
+**Licencia**  
+Uso educativo – no comercial.
