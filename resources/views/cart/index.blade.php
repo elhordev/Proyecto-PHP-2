@@ -122,10 +122,10 @@
 
                         @if ($descuento)
                             <tr>
-                                <td colspan="4" class="px-6 py-5 text-right font-semibold text-[#FF6B35]">
+                                <td colspan="4" class="px-6 py-5 text-right font-semibold text-[#006D77]">
                                     Descuento ({{ $cupon['codigo'] ?? 'cupón' }}):
                                 </td>
-                                <td class="px-6 py-5 font-bold text-[#FF6B35] text-lg">
+                                <td class="px-6 py-5 font-bold text-[#006D77] text-lg">
                                     -€{{ number_format($descuento, 2) }}
                                 </td>
                             </tr>

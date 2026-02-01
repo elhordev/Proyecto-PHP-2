@@ -8,6 +8,7 @@ Arráncalo es una aplicación e-commerce desarrollada en Laravel que simula una 
 El proyecto destaca por su diseño limpio y responsivo, uso de Laravel Sail para desarrollo en contenedores y la incorporación de dos mejoras significativas respecto a la estructura base.
 
 El diseño está inspirado el las primeras versiones de Material Design de Google en las anteriores versiones de Android AOKP.
+
 **Tecnologías utilizadas**  
 - PHP 8.1+  
 - Laravel 10.x  
@@ -125,24 +126,25 @@ root
 7. Instalar dependencias frontend  
    ```bash
    sail npm install
-   sail npm run dev   # o npm run build para producción
    ```
 
 8. Acceder a la aplicación  
    - Frontend: http://localhost  
    - Admin: http://localhost/admin (tras login)
 
-**Uso básico**
-
+**Uso**
+La barra superior de navegación aparece en todo momento para intercambiar entre vistas.
 - **Inicio**: categorías y productos destacados + acceso rápido a ofertas  
-- **Productos**: listado general y página detalle con productos del mismo color  
-- **Ofertas**: página dedicada con descuentos y productos afectados  
-- **Carrito**: añadir, modificar cantidades, aplicar cupón, ver total con descuento  
-- **Contacto**: botón directo a WhatsApp Web  
+- **Productos**: listado general de productos en /products y solo los de oferta en /products-on-sale. En esa vista, también puedes acceder a los detalles de cada producto.
+- **Ofertas**: página dedicada a las ofertas actuales, donde puedes ver en qué te beneficia cada una.  
+- **Carrito**: añadir, modificar cantidades, aplicar cupón, ver total con descuento desglosado.  
+- **Contacto**: formulario de contacto para contactar con el administrador de la tienda.  
 - **Autenticación**: login/register vía Breeze  
-- **Administración**: /admin/products (gestionar productos, categorías, ofertas y cupones)
+- **Administración**: /admin/products (gestionar productos, categorías, ofertas y cupones). Estas vistas son específicas para usuarios autenticados como administrador.
+- **Imagenes**: las imágenes pueden venir tanto de una URL, como de un archivo en local.
 
-**Usuarios de prueba** (creados por seeder)
+
+**Usuarios de prueba** (Para la presentación del proyecto, no se crea con seeder.)
 
 | Rol          | Email                   | Contraseña | Acceso principal                  |
 |--------------|-------------------------|------------|-----------------------------------|
@@ -150,7 +152,7 @@ root
 
 **Requisitos previos**
 
-- Docker + Docker Compose  
+- Docker + Docker Compose  (Con WSL conectado a Docker Desktop)
 - Composer  
 - PHP 8.1+  
 - Node.js + npm  
