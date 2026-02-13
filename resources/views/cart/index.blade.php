@@ -165,8 +165,18 @@
                             class="bg-[#006D77] text-white px-6 py-3 rounded-xl hover:bg-[#005A63] transition duration-200 shadow-sm">
                         Aplicar
                     </button>
+                
                 </form>
+                @if(session('cupon'))
+                    <form action="{{ route('cart.removeCupon') }}" method="POST" class="w-full md:w-auto">
+                        @csrf
+                        <button type="submit" 
+                                class="bg-[#B3261E] text-white px-6 py-3 rounded-xl hover:bg-[#9B2226] transition duration-200 shadow-sm w-full md:w-auto">
+                            Eliminar Cupón
+                        </button>
+                    </form>
+                    @endif
             </div>
-        @endif
+                @endif
     </div>
 @endsection

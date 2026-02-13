@@ -113,4 +113,9 @@ class CartController extends Controller
             return redirect()->route('cart.index')->with('error', 'Cupón inválido.');                           
     }
     }
+    public function removeCupon(): RedirectResponse
+    {
+        session()->forget('cupon');
+        return redirect()->route('cart.index')->with('success', 'Cupón eliminado correctamente.');
     }
+}
