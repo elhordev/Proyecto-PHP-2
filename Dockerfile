@@ -1,0 +1,31 @@
+# 1. Imagen base de PHP con Apache
+FROM php:8.1-apache
+
+# 2. Instalar extensiones de PHP necesarias
+RUN apt-get update && apt-get install -y \
+    libzip-dev unzip git && \
+    docker-php-ext-install pdo_mysql zip
+
+# 3. Habilitar rewrite de Apache
+RUN a2enmod rewrite
+
+# 4. Copiar código
+COPY . /var/www/html/
+
+# 5. Ajustar permisos (si es necesario)
+RUN chown -R www-data:www-data /var/www/html
+
+# 6. Instalar Composer
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+
+# 7. Instalar dependencias de Composer
+RUN composer install --optimize-autoloader --no-dev
+
+# 8. Generar APP_KEY
+RUN php artisan key:generate
+
+# 9. Expone el puerto que Railway usará
+ENV PORT 80
+EXPOSE 80
+
+CMD ["apache2-foreground"]
