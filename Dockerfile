@@ -18,8 +18,10 @@ RUN chown -R www-data:www-data /var/www/html
 # 6. Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 # 7. Instalar dependencias de Composer
-RUN composer install --optimize-autoloader --no-dev
+RUN composer install --optimize-autoloader 
 
 # 8. Generar APP_KEY
 RUN php artisan key:generate
