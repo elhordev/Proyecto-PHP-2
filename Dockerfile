@@ -9,11 +9,22 @@ RUN apt-get update && apt-get install -y \
 # 3. Habilitar rewrite de Apache
 RUN a2enmod rewrite
 
+#Instalar Node.js y npm para Vite/Breeze ===
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install -g npm@latest
+
 # 4. Copiar código
 COPY . /var/www/html/
 
 # 5. Ajustar permisos (si es necesario)
 RUN chown -R www-data:www-data /var/www/html
+
+# 5. Instalar dependencias NPM y compilar assets (vite build)
+WORKDIR /var/www/html
+RUN npm install --legacy-peer-deps \  # --legacy-peer-deps si hay warnings de compatibilidad
+    && npm run build \
+    && rm -rf node_modules  # Limpia para reducir tamaño de imagen
 
 # 6. Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
