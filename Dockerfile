@@ -7,7 +7,6 @@ RUN apt-get update && apt-get install -y \
     docker-php-ext-install pdo_mysql zip
 
 # 3. Habilitar rewrite de Apache
-RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork
 
 RUN a2enmod rewrite
 
@@ -32,4 +31,11 @@ RUN php artisan key:generate
 ENV PORT 80
 EXPOSE 80
 
-CMD ["apache2-foreground"]
+CMD ["bash", "-c", "\
+    set -eux; \
+    a2dismod mpm_event mpm_worker || true; \
+    rm -f /etc/apache2/mods-enabled/mpm_*; \
+    a2enmod mpm_prefork; \
+    apache2ctl -t || echo 'Apache config test failed - check logs'; \
+    exec apache2-foreground \
+"]
