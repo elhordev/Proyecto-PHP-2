@@ -35,6 +35,15 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 # Asegurar que busque index.php primero
 RUN echo "DirectoryIndex index.php index.html" >> /etc/apache2/apache2.conf
 
+# Asegurar permisos en build
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache \
+    && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+
+# Limpiar y cachear configs (|| true para no fallar si .env no está completo)
+RUN php artisan config:cache || true \
+    && php artisan route:cache || true \
+    && php artisan view:cache || true
+
 # === FIX MPM (ya lo tenías, lo mantenemos tal cual) ===
 CMD ["bash", "-c", "\
     set -eux; \
