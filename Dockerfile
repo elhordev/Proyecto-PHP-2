@@ -44,6 +44,8 @@ RUN php artisan config:cache || true \
     && php artisan route:cache || true \
     && php artisan view:cache || true
 
+RUN echo "ServerName p-diego-2ev-production.up.railway.app" >> /etc/apache2/apache2.conf
+
 # === FIX MPM (ya lo tenías, lo mantenemos tal cual) ===
 CMD ["bash", "-c", "\
     set -eux; \
