@@ -7,6 +7,8 @@ RUN apt-get update && apt-get install -y \
     docker-php-ext-install pdo_mysql zip
 
 # 3. Habilitar rewrite de Apache
+RUN a2dismod mpm_event mpm_worker && a2enmod mpm_prefork
+
 RUN a2enmod rewrite
 
 # 4. Copiar código
